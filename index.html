@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>goit-js-hw-11</title>
+    <title>goit-js-hw-12</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="/goit-js-hw-11/index.js"></script>
-    <link rel="modulepreload" crossorigin href="/goit-js-hw-11/assets/vendor-5YrzWRhu.js">
-    <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/vendor-CWKLx11g.css">
-    <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/index-j6UAh2vs.css">
+    <script type="module" crossorigin src="/goit-js-hw-12/index.js"></script>
+    <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-5YrzWRhu.js">
+    <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/vendor-CWKLx11g.css">
+    <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/index-CN0aBtFx.css">
   </head>
   <body>
     <main>
@@ -29,14 +29,17 @@
                 required
               />
             </label>
-            <button type="submit" class="form-button">Search</button>
+            <button type="submit" class="button form-button">Search</button>
           </form>
-        </div>
-        <div class="loader-box">
-          <span class="loader"></span>
         </div>
 
         <ul class="gallery"></ul>
+        <div class="loader-box visually-hidden">
+          <span class="loader"></span>
+        </div>
+        <div class="button-box visually-hidden">
+          <button type="button" class="button load-more-btn">Load More</button>
+        </div>
       </div>
     </main>
   </body>
