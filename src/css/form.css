@@ -45,7 +45,7 @@
   color: #808080;
 }
 
-.form-button {
+.button {
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
   font-size: 16px;
@@ -59,7 +59,17 @@
   transition: background-color 350ms ease-in-out;
 }
 
-.form-button:hover,
-.form-button:focus {
+.button:hover,
+.button:focus {
   background-color: #6c8cff;
+}
+
+.button-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  gap: 20px;
 }

@@ -1,25 +1,25 @@
 import axios from 'axios';
-import { createGallery, hideLoader } from './render-functions';
-import iziToast from 'izitoast';
-import iconError from '../public/error-icon.svg';
+import { displayError } from './handlers';
 
-const apiKey = '51785678-62c23287dd78ada80f49c87f0';
+const apiKey = '51363683-2e56118fc156594c4f1ee220a';
 axios.defaults.baseURL = `https://pixabay.com`;
 
-export function getImageByQuery(query) {
-  const formattedQuery = query.split(' ').join('+');
-  return axios
-    .get('/api/', {
+export async function getImageByQuery(query, page) {
+  try {
+    const response = await axios.get('/api/', {
       params: {
         key: apiKey,
-        q: formattedQuery,
+        q: query,
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: true,
+        per_page: 15,
+        page: page,
       },
-    })
-    .then(res => {
-      return res.data.hits;
-    })
-    .catch(error => console.log(error));
+    });
+
+    return response.data;
+  } catch (error) {
+    displayError(error.message);
+  }
 }
