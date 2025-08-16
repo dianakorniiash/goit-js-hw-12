@@ -1,6 +1,6 @@
 import { getImageByQuery } from './js/pixabay-api';
 import {
-  renderGallery,
+  createGallery,
   clearGallery,
   showLoader,
   hideLoader,
@@ -8,46 +8,56 @@ import {
   hideLoadMoreButton,
 } from './js/render-functions';
 
+const refs = {
+  formEl: document.querySelector('.form'),
+  galleryEl: document.querySelector('.gallery'),
+  loadMoreBtnEl: document.querySelector('.button-box'),
+  loaderEl: document.querySelector('.loader-box'),
+};
+
 let currentPage = 1;
 let currentQuery = '';
-const perPage = 40;
-
-const refs = {
-  formEl: document.querySelector('.search-form'),
-  galleryEl: document.querySelector('.gallery'),
-  loadMoreBtnEl: document.querySelector('.load-more'),
-  loaderEl: document.querySelector('.loader'),
-};
+const perPage = 15; 
 
 
 async function onFormSubmit(event) {
   event.preventDefault();
 
-  const searchQuery = event.target.elements.searchQuery.value.trim();
-  if (!searchQuery) return;
+  const userInput = event.target.elements[0].value.trim();
+  if (!userInput) {
+    alert('Please, write something');
+    return;
+  }
 
-  currentQuery = searchQuery;
+  currentQuery = userInput;
   currentPage = 1;
 
   clearGallery();
-  hideLoadMoreBtn();
+  hideLoadMoreButton();
   showLoader();
 
   try {
-    const images = await getImageByQuery(currentQuery, currentPage, perPage);
+    const data = await getImageByQuery(currentQuery, currentPage);
 
-    if (images.hits.length === 0) {
+    if (data.hits.length === 0) {
       hideLoader();
-      return alert('Sorry, no images found. Please try again!');
+      alert('Sorry, no images found. Please try again!');
+      return;
     }
 
-    renderGallery(images.hits);
+    createGallery(data.hits);
 
-    if (images.totalHits > perPage) {
-      showLoadMoreBtn();
+    const totalPages = Math.ceil(data.totalHits / perPage);
+    if (currentPage < totalPages) {
+      showLoadMoreButton();
+    } else {
+      alert("You've reached the end of search results.");
     }
   } catch (error) {
     console.error(error);
+    hideLoader();
+    hideLoadMoreButton();
+    alert(`Error: ${error.message}`);
   } finally {
     hideLoader();
   }
@@ -56,22 +66,23 @@ async function onFormSubmit(event) {
 
 async function onLoadMoreBtnClick() {
   currentPage += 1;
-  hideLoadMoreBtn();
+  hideLoadMoreButton();
   showLoader();
 
   try {
-    const images = await getImageByQuery(currentQuery, currentPage, perPage);
+    const data = await getImageByQuery(currentQuery, currentPage);
+    createGallery(data.hits);
 
-    renderGallery(images.hits);
-
-    const totalPages = Math.ceil(images.totalHits / perPage);
+    const totalPages = Math.ceil(data.totalHits / perPage);
     if (currentPage < totalPages) {
-      showLoadMoreBtn();
+      showLoadMoreButton();
     } else {
-      alert("We're sorry, but you've reached the end of search results.");
+      alert("You've reached the end of search results.");
     }
   } catch (error) {
     console.error(error);
+    hideLoadMoreButton();
+    alert(`Error: ${error.message}`);
   } finally {
     hideLoader();
   }
