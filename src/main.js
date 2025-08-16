@@ -4,8 +4,8 @@ import {
   clearGallery,
   showLoader,
   hideLoader,
-  showLoadMoreBtn,
-  hideLoadMoreBtn,
+  showLoadMoreButton,
+  hideLoadMoreButton,
 } from './js/render-functions';
 
 let currentPage = 1;
