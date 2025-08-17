@@ -8,6 +8,9 @@ import {
   hideLoadMoreButton,
 } from './js/render-functions';
 
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
+
 const refs = {
   formEl: document.querySelector('.form'),
   galleryEl: document.querySelector('.gallery'),
@@ -25,7 +28,11 @@ async function onFormSubmit(event) {
 
   const userInput = event.target.elements[0].value.trim();
   if (!userInput) {
-    alert('Please, write something');
+    iziToast.warning({
+      title: "Warning",
+      message: "Please, write something",
+      position: "topRight",
+    });
     return;
   }
 
@@ -41,7 +48,11 @@ async function onFormSubmit(event) {
 
     if (data.hits.length === 0) {
       hideLoader();
-      alert('Sorry, no images found. Please try again!');
+      iziToast.error({
+        title: "Error",
+        message: "Sorry, no images found. Please try again!",
+        position: "topRight",
+      });
       return;
     }
 
@@ -51,13 +62,20 @@ async function onFormSubmit(event) {
     if (currentPage < totalPages) {
       showLoadMoreButton();
     } else {
-      alert("You've reached the end of search results.");
+      iziToast.info({
+        title: "Info",
+        message: "You've reached the end of search results.",
+        position: "topRight",
+      });
     }
   } catch (error) {
     console.error(error);
-    hideLoader();
     hideLoadMoreButton();
-    alert(`Error: ${error.message}`);
+    iziToast.error({
+      title: "Error",
+      message: error.message,
+      position: "topRight",
+    });
   } finally {
     hideLoader();
   }
@@ -73,16 +91,33 @@ async function onLoadMoreBtnClick() {
     const data = await getImageByQuery(currentQuery, currentPage);
     createGallery(data.hits);
 
+
+    const { height: cardHeight } = refs.galleryEl
+      .firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: "smooth",
+    });
+
     const totalPages = Math.ceil(data.totalHits / perPage);
     if (currentPage < totalPages) {
       showLoadMoreButton();
     } else {
-      alert("You've reached the end of search results.");
+      iziToast.info({
+        title: "Info",
+        message: "You've reached the end of search results.",
+        position: "topRight",
+      });
     }
   } catch (error) {
     console.error(error);
     hideLoadMoreButton();
-    alert(`Error: ${error.message}`);
+    iziToast.error({
+      title: "Error",
+      message: error.message,
+      position: "topRight",
+    });
   } finally {
     hideLoader();
   }
